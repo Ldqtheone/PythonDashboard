@@ -11,6 +11,8 @@ from influxdb_client import Point
 
 import Utils.database as db
 
+from Utils.Config.parser import *
+
 
 def main():
     """ main method """
@@ -32,6 +34,14 @@ def main():
     db.write_query(data_to_send)
 
     print(db.execute_query("Brian"))
+
+    get_data()
+    print(get_interval(Interval.memory.name))
+    print(get_token())
+    print(get_org())
+    print(get_bucket())
+    print(get_url())
+    print(get_display())
 
 
 if __name__ == '__main__':
