@@ -1,0 +1,13 @@
+display : "full" # full/basic
+
+interval :
+  cpu: 5
+  memory: 10
+  disk: 5
+  network: 4
+  sensor: 6
+
+Token : "4DszHczuRA9-bcnynoj2ifv9sXE7rJaIXNnUcHIL2eTSeoFhsK1O7UWivZL1nZXNj47ECdYy7dkdgNh024g8Lw=="
+org : "brian.lecarpentier@edu.itescia.fr"
+bucket : "all_person"
+url : "https://eu-central-1-1.aws.cloud2.influxdata.com"

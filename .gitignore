@@ -1,2 +1,6 @@
 venv*
 .idea*
+
+Utils/__pycache__/
+
+Utils/Config/__pycache__/
