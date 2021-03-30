@@ -190,7 +190,7 @@ class UtilsClass:
         Get number of writes from psUtils
         :return: an int
         """
-        return psutil.disk_io_counters().write_count,
+        return psutil.disk_io_counters().write_count
 
     def get_disk_io_read_bytes(self):
         """
@@ -297,15 +297,21 @@ class UtilsClass:
         """
         Get all data from psutils
         """
+
         self.data = {
             "user": self.get_user(),
             "system": self.get_system(),
             "idle": self.get_idle(),
             "cpu_percent": self.get_cpu_percent(),
-            "cpu_times_percent": self.get_cpu_times_percent(),
+            "cpu_times_percent_user": self.get_cpu_times_percent().user,
+            "cpu_times_percent_nice": self.get_cpu_times_percent().nice,
+            "cpu_times_percent_system": self.get_cpu_times_percent().system,
+            "cpu_times_percent_idle": self.get_cpu_times_percent().idle,
             "ctx_switches": self.get_ctx_switches(),
             "interrupts": self.get_cpu_interrupts(),
-            "load_avg": self.get_load_avg(),
+            "load_avg_1": self.get_load_avg()[0],
+            "load_avg_5": self.get_load_avg()[1],
+            "load_avg_15": self.get_load_avg()[2],
 
             "vm_total": self.get_vm_total(),
             "vm_available": self.get_vm_available(),
@@ -318,7 +324,7 @@ class UtilsClass:
             "sm_sout": self.get_sm_sout(),
 
             # "disk_partitions": self.get_disk_partitions(),
-            "disk_usage_list": self.get_disk_usages_list(),
+            #"disk_usage_list": self.get_disk_usages_list(),
             "disk_io_read_count": self.get_disk_io_read_count(),
             "disk_io_write_count": self.get_disk_io_write_count(),
             "disk_io_read_bytes": self.get_disk_io_read_bytes(),
@@ -335,8 +341,17 @@ class UtilsClass:
 
             # "sensor_temp": self.get_sensor_temp(),
             # "sensor_fans": self.get_sensor_fans(),
-            "sensor_battery": self.get_sensor_battery(),
+            "sensor_battery_percent": self.get_sensor_battery().percent,
+            "sensor_battery_secsleft": self.get_sensor_battery().secsleft,
+            "sensor_battery_power_plugged": self.get_sensor_battery().power_plugged,
         }
+
+        for part in self.get_disk_partitions():
+            self.data["disk_usage_" + part.device + "_total"] = self.get_disk_usage(part.mountpoint).total
+            self.data["disk_usage_" + part.device + "_used"] = self.get_disk_usage(part.mountpoint).used
+            self.data["disk_usage_" + part.device + "_free"] = self.get_disk_usage(part.mountpoint).free
+            self.data["disk_usage_" + part.device + "_percent"] = self.get_disk_usage(part.mountpoint).percent
+
         return self.data
 
     def get_last_data(self):
