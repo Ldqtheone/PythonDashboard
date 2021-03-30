@@ -14,6 +14,11 @@ def main():
     """ main method """
     get_data()
     print(get_interval(Interval.memory.name))
+    print(get_token())
+    print(get_org())
+    print(get_bucket())
+    print(get_url())
+    print(get_display())
     pass
 
 
