@@ -7,6 +7,7 @@ interval :
   network: 4
   sensor: 6
 
+identifier: "PC1" # PC{Unique number} | Example: PC32
 token : "4DszHczuRA9-bcnynoj2ifv9sXE7rJaIXNnUcHIL2eTSeoFhsK1O7UWivZL1nZXNj47ECdYy7dkdgNh024g8Lw=="
 org : "brian.lecarpentier@edu.itescia.fr"
 bucket : "all_person"

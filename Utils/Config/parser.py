@@ -80,3 +80,11 @@ def get_display():
     :return: the display
     """
     return get_data()["display"]
+
+
+def get_identifier():
+    """
+    Load identifier data from config file
+    :return: the identifier
+    """
+    return get_data()["identifier"]
