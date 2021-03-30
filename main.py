@@ -18,6 +18,7 @@ def main():
     """ main method """
     agent_data = utils.get_current_data()
     point = {}
+    agent_id = get_identifier()
 
     for key, value in agent_data.items():
         point[key] = value
@@ -27,29 +28,18 @@ def main():
     data_to_send = [
         {
             "measurement": "hardware_info",
-            "tags": {"agent_number": "Brian"},
+            "tags": {"agent_number": f"{agent_id}"},
             "fields": point
         }]
 
     db.write_query(data_to_send)
 
-    print(db.execute_query("Brian"))
-
-    get_data()
-    print(get_interval(Interval.memory.name))
-    print(get_token())
-    print(get_org())
-    print(get_bucket())
-    print(get_url())
-    print(get_display())
+    print(db.execute_query(agent_id))
 
 
 if __name__ == '__main__':
     utils = UtilsClass()
-    print(utils.get_current_data())
+
     partitions = utils.get_disk_partitions()
-    print(partitions)
-    print(utils.get_disk_usage(partitions[0].device))
-    print(utils.get_disk_usages_list())
 
     main()
