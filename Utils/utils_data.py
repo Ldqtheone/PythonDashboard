@@ -293,6 +293,13 @@ class UtilsClass:
 
     # endregion
 
+    def create_user_id(self):
+        """
+        Get number of bytes written from psUtils
+        :return: a string containing first user name and pid
+        """
+        return str(psutil.users()[0].name) + "_" + str(psutil.users()[0].pid)
+
     def get_current_data(self):
         """
         Get all data from psutils
@@ -344,6 +351,7 @@ class UtilsClass:
             "sensor_battery_percent": self.get_sensor_battery().percent,
             "sensor_battery_secsleft": self.get_sensor_battery().secsleft,
             "sensor_battery_power_plugged": self.get_sensor_battery().power_plugged,
+            "user_id": self.create_user_id()
         }
 
         for part in self.get_disk_partitions():
