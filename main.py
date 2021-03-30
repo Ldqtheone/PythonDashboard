@@ -5,7 +5,7 @@ All Rights Reserved
 Released under the MIT license
 
 """
-
+import psutil
 
 def main():
     """ main method """
