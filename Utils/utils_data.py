@@ -347,10 +347,11 @@ class UtilsClass:
         }
 
         for part in self.get_disk_partitions():
-            self.data["disk_usage_" + part.device + "_total"] = self.get_disk_usage(part.mountpoint).total
-            self.data["disk_usage_" + part.device + "_used"] = self.get_disk_usage(part.mountpoint).used
-            self.data["disk_usage_" + part.device + "_free"] = self.get_disk_usage(part.mountpoint).free
-            self.data["disk_usage_" + part.device + "_percent"] = self.get_disk_usage(part.mountpoint).percent
+            device = part.device.split("/")[len(part.device.split("/"))-1]
+            self.data["disk_usage_total_" + device] = self.get_disk_usage(part.mountpoint).total
+            self.data["disk_usage_used_" + device] = self.get_disk_usage(part.mountpoint).used
+            self.data["disk_usage_free_" + device] = self.get_disk_usage(part.mountpoint).free
+            self.data["disk_usage_percent_" + device] = self.get_disk_usage(part.mountpoint).percent
 
         return self.data
 
