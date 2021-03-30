@@ -300,6 +300,7 @@ class UtilsClass:
         """
         return str(psutil.users()[0].name) + "_" + str(psutil.users()[0].pid)
 
+
     def get_current_data(self):
         """
         Get all data from psutils
@@ -354,12 +355,18 @@ class UtilsClass:
             "user_id": self.create_user_id()
         }
 
-        for part in self.get_disk_partitions():
-            device = part.device.split("/")[len(part.device.split("/"))-1]
-            self.data["disk_usage_total_" + device] = self.get_disk_usage(part.mountpoint).total
-            self.data["disk_usage_used_" + device] = self.get_disk_usage(part.mountpoint).used
-            self.data["disk_usage_free_" + device] = self.get_disk_usage(part.mountpoint).free
-            self.data["disk_usage_percent_" + device] = self.get_disk_usage(part.mountpoint).percent
+        partions_list = self.get_disk_partitions()
+
+        for i in range(0, len(partions_list), 1):
+            if "\\" in partions_list[i].device:
+                device = "device_" + str(i)
+            else:
+                device = partions_list[i].device.split("/")[len(partions_list[i].device.split("/")) - 1]
+
+            self.data["disk_usage_total_" + device] = self.get_disk_usage(partions_list[i].mountpoint).total
+            self.data["disk_usage_used_" + device] = self.get_disk_usage(partions_list[i].mountpoint).used
+            self.data["disk_usage_free_" + device] = self.get_disk_usage(partions_list[i].mountpoint).free
+            self.data["disk_usage_percent_" + device] = self.get_disk_usage(partions_list[i].mountpoint).percent
 
         return self.data
 

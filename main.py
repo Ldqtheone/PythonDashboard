@@ -16,6 +16,8 @@ from Utils.Config.parser import *
 
 def main():
     """ main method """
+    utils = UtilsClass()
+
     agent_data = utils.get_current_data()
     point = {}
     agent_id = get_identifier()
@@ -38,8 +40,4 @@ def main():
 
 
 if __name__ == '__main__':
-    utils = UtilsClass()
-
-    partitions = utils.get_disk_partitions()
-
     main()
