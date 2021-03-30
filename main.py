@@ -6,6 +6,8 @@ Released under the MIT license
 
 """
 import psutil
+from Utils.utils_data import *
+
 
 def main():
     """ main method """
@@ -13,4 +15,6 @@ def main():
 
 
 if __name__ == '__main__':
+    utils = UtilsClass()
+    print(utils.get_current_data())
     main()
