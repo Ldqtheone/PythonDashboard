@@ -311,7 +311,7 @@ class UtilsClass:
             "idle": self.get_idle(),
             "cpu_percent": self.get_cpu_percent(),
             "cpu_times_percent_user": self.get_cpu_times_percent().user,
-            "cpu_times_percent_nice": self.get_cpu_times_percent().nice,
+            # "cpu_times_percent_nice": self.get_cpu_times_percent().nice,
             "cpu_times_percent_system": self.get_cpu_times_percent().system,
             "cpu_times_percent_idle": self.get_cpu_times_percent().idle,
             "ctx_switches": self.get_ctx_switches(),
@@ -348,9 +348,9 @@ class UtilsClass:
 
             # "sensor_temp": self.get_sensor_temp(),
             # "sensor_fans": self.get_sensor_fans(),
-            "sensor_battery_percent": self.get_sensor_battery().percent,
-            "sensor_battery_secsleft": self.get_sensor_battery().secsleft,
-            "sensor_battery_power_plugged": self.get_sensor_battery().power_plugged,
+            # "sensor_battery_percent": self.get_sensor_battery().percent,
+            # "sensor_battery_secsleft": self.get_sensor_battery().secsleft,
+            # "sensor_battery_power_plugged": self.get_sensor_battery().power_plugged,
             "user_id": self.create_user_id()
         }
 

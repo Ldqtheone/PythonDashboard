@@ -14,7 +14,6 @@ import Utils.database as db
 
 def main():
     """ main method """
-
     agent_data = utils.get_current_data()
     point = {}
 
