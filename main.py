@@ -7,9 +7,8 @@ Released under the MIT license
 """
 
 from Utils.utils_data import *
-from influxdb_client import Point
 
-import Utils.database as db
+from Utils.database import *
 
 from Utils.Config.parser import *
 
@@ -17,6 +16,7 @@ from Utils.Config.parser import *
 def main():
     """ main method """
     utils = UtilsClass()
+    database = Database()
 
     agent_data = utils.get_current_data()
     point = {}
@@ -34,9 +34,9 @@ def main():
             "fields": point
         }]
 
-    db.write_query(data_to_send)
+    database.write_query(data_to_send)
 
-    print(db.execute_query(agent_id))
+    print(database.execute_query(agent_id))
 
 
 if __name__ == '__main__':
