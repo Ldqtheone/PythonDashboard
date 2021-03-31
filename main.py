@@ -10,14 +10,16 @@ from Utils.utils_data import *
 from influxdb_client import Point
 
 import Utils.database as db
+import time
 
 from Utils.Config.parser import *
 
+from apscheduler.schedulers.background import BackgroundScheduler
 
-def main():
-    """ main method """
+
+def send_data():
+
     utils = UtilsClass()
-
     agent_data = utils.get_current_data()
     point = {}
     agent_id = get_identifier()
@@ -35,8 +37,22 @@ def main():
         }]
 
     db.write_query(data_to_send)
-
     print(db.execute_query(agent_id))
+
+
+def main():
+    """ main method """
+
+    scheduler = BackgroundScheduler()
+    job = scheduler.add_job(send_data, 'interval', seconds=get_interval(Interval.disk.name))
+    scheduler.print_jobs()
+    scheduler.start()
+
+    try:
+        while True:
+            time.sleep(5)
+    except (KeyboardInterrupt, SystemExit):
+        scheduler.shutdown()
 
 
 if __name__ == '__main__':
