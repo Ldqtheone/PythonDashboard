@@ -36,12 +36,13 @@ class Database:
         :return: all datas
         """
 
-        # renvoyer un tableau de dictionnaire plutot
+        # renvoyer un tableau de dictionnaire plutot [{cpu:1}, {cpu:2.3}, ...]
         result = self.client.query_api().query(org=self.org, query=query)
+        print(result)
         results = []
         for table in result:
             for record in table.records:
-                results.append((record.get_value(), record.get_field()))
+                results.append({record.get_field(): record.get_value()})
 
         return results
 
@@ -80,16 +81,20 @@ class Database:
             |> filter(fn: (r) => r.category == "{category}" )'
         return self.execute_query(query)
 
-    # @todo complete this function
-    def get_agent_query(self, start_time=1, start_unit="h"):
+    def get_agent_query(self):
         """
-        Get agent from influxDb
-        :param start_time: used to get data in a range from this time to now
-        :type start_time: int
-        :param start_unit: a time unit
-        :type start_unit: str
+        Get all agent from influxDb
         """
-        query = f'from(bucket: "{self.bucket}")\
-            |> range(start: -{start_time}{start_unit})\
-            |> filter(fn: (r) => r._measurement == "hardware_info")'
-        return self.execute_query(query)
+
+        query = f"""
+        import \"influxdata/influxdb/schema\"
+
+        schema.tagValues(bucket: \"{self.bucket}\",  tag: "agent_number")
+        """
+
+        query_api = self.client.query_api()
+        tables = query_api.query(query=query, org=self.org)
+
+        # transform data into an array
+        agents = [row.values["_value"] for table in tables for row in table]
+        return agents

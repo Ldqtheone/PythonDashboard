@@ -23,7 +23,7 @@ def search_category_if_agent_exist(category):
     if 'agent' in request.args:
         # Use the jsonify function from Flask to convert our list of
         # Python dictionaries to the JSON format.
-        return jsonify(db.get_data_by_category_query(str(request.args['agent']), category))
+        return jsonify(db.get_data_by_category_query(str(request.args['agent']), category, 5))
     else:
         return "Error: No agent field provided. Please specify an agent."
 
@@ -55,7 +55,7 @@ def get_agents():
     """
     This route get all agents in DB.
     """
-    return jsonify(db.get_agent_query(3))
+    return jsonify(db.get_agent_query())
 
 
 @app.route('/get/data', methods=['GET'])
