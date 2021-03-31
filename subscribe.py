@@ -38,6 +38,8 @@ def callback(ch, method, properties, body):
 
     db = Database()
 
+    print("DSRFKJLGBNSDOIRJGVNDRXFVGNBDCFIUFJBGRHDRIJUKGBHTRIUKH")
+
     data = (json.loads(body))
     db.write_query(data)
 

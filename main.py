@@ -17,10 +17,14 @@ def main():
     influx = DataStorageClass()
 
     scheduler = BackgroundScheduler()
-    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.cpu.name],  seconds=get_interval(Interval.cpu.name))
-    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.memory.name], seconds=get_interval(Interval.memory.name))
-    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.disk.name], seconds=get_interval(Interval.disk.name))
-    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.network.name], seconds=get_interval(Interval.network.name))
+    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.cpu.name],
+                            seconds=get_interval(Interval.cpu.name))
+    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.memory.name],
+                            seconds=get_interval(Interval.memory.name))
+    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.disk.name],
+                            seconds=get_interval(Interval.disk.name))
+    job = scheduler.add_job(influx.send_data_to_influx_db, 'interval', args=[Interval.network.name],
+                            seconds=get_interval(Interval.network.name))
     scheduler.print_jobs()
     scheduler.start()
     try:
