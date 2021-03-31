@@ -17,7 +17,7 @@ def run_process(process):
     MultiProcess Luancher
     :param process:
     """
-    os.system('python {}'.format(process))
+    os.system('python3 {}'.format(process))
 
 
 if __name__ == '__main__':

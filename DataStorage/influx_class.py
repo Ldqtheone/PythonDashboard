@@ -56,14 +56,14 @@ class DataStorageClass:
         data_to_send = [
             {
                 "measurement": "hardware_info",
-                "tags": {"agent_number": f"{agent_id}"},
+                "tags": {"agent_number": f"{agent_id}", "category": mode},
                 "fields": point
             }]
 
         publisher.publish_message(data_to_send)
 
         # self.database.write_query(data_to_send)
-        print(self.database.execute_query(agent_id))
+        print(self.database.insert_query(agent_id))
 
     def send_data_with_pika(self):
         """

@@ -31,17 +31,14 @@ class Database:
 
         write_api.write(self.bucket, self.org, data)
 
-    def execute_query(self, agent):
+    def execute_query(self, query):
         """
         Querying Database to get hardware info per agent
-        :param agent: current user agent
+        :param query: query
         :return: all datas
         """
-        query = f'from(bucket: "hardware")\
-            |> range(start: -1h)\
-            |> filter(fn: (r) => r._measurement == "hardware_info")\
-            |> filter(fn: (r) => r.agent_number == "{agent}")'
 
+        # renvoyer un tableau de dictionnaire plutot
         result = self.client.query_api().query(org=self.org, query=query)
         results = []
         for table in result:
@@ -49,3 +46,33 @@ class Database:
                 results.append((record.get_value(), record.get_field()))
 
         return results
+
+    def insert_query(self, agent):
+        """
+        Insert data to influxDb depending on agent
+        :param agent: current agent
+        :type agent: str
+        """
+        query = f'from(bucket: "hardware")\
+            |> range(start: -1h)\
+            |> filter(fn: (r) => r._measurement == "hardware_info")\
+            |> filter(fn: (r) => r.agent_number == "{agent}")'
+        return self.execute_query(query)
+
+    def get_cpu_query(self, agent, category):
+        """
+        Get data from influxDb depending on category search and agent
+        :param category: category of data (cpu, network, disk ...)
+        :type category: str
+        :param agent: current agent
+        :type agent: str
+        """
+
+        query = f'from(bucket: "hardware")\
+            |> range(start: -1h)\
+            |> filter(fn: (r) => r._measurement == "hardware_info")\
+            |> filter(fn: (r) => r.agent_number == "{agent}" )\
+            |> filter(fn: (r) => r.category == "{category}" )'
+        return self.execute_query(query)
+
+
