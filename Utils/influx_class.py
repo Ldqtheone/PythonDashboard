@@ -12,17 +12,33 @@ import Utils.database as db
 class DataStorageClass:
     """A class to send data to influx db"""
     utils = UtilsClass()
+    database = db.Database()
 
     def __init__(self):
             pass
 
-    def send_data_to_influx_db(self, check_data_type=False):
+    def send_data_to_influx_db(self, mode,  check_data_type=False):
         """
         Send data to influxDB on cloud
+        :param mode: name of the data to get
+        :type mode: str
         :param check_data_type: if True, filter none numeric value from agent data
         :type check_data_type: bool
         """
-        agent_data = self.utils.get_current_data()
+
+        if mode == Interval.cpu.name:
+            agent_data = self.utils.get_cpu_data()
+        elif mode == Interval.memory.name:
+            agent_data = self.utils.get_memory_data()
+        elif mode == Interval.disk.name:
+            agent_data = self.utils.get_disk_data()
+        elif mode == Interval.network.name:
+            agent_data = self.utils.get_net_data()
+        elif mode == Interval.sensor.name:
+            agent_data = self.utils.get_sensor_data()
+        else:
+            agent_data = self.utils.get_current_data()
+
         agent_id = get_identifier()
         point = {}
 
@@ -42,8 +58,8 @@ class DataStorageClass:
                 "fields": point
             }]
 
-        db.write_query(data_to_send)
-        print(db.execute_query(agent_id))
+        self.database.write_query(data_to_send)
+        print(self.database.execute_query(agent_id))
 
     def send_data_with_pika(self):
         """
