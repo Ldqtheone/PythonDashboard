@@ -16,9 +16,9 @@ class DataStorageClass:
     database = db.Database()
 
     def __init__(self):
-            pass
+        pass
 
-    def send_data_to_influx_db(self, mode,  check_data_type=False):
+    def send_data_to_influx_db(self, mode, check_data_type=False):
         """
         Send data to influxDB on cloud
         :param mode: name of the data to get
@@ -70,4 +70,3 @@ class DataStorageClass:
         Send data with pika (dataBus)
         """
         pass
-

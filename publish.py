@@ -13,7 +13,7 @@ import json
 def publish_message(data):
     """
     RabbitMq publisher
-    :param data:
+    :param data: hardware datas to send in DB
     """
     # Create a new instance of the Connection object
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))

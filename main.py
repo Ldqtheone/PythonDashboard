@@ -6,7 +6,7 @@ Released under the MIT license
 
 """
 
-from Utils.influx_class import *
+from DataStorage.influx_class import *
 from apscheduler.schedulers.background import BackgroundScheduler
 from Utils.Config.parser import *
 import time

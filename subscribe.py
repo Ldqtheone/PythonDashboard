@@ -13,7 +13,7 @@ from Utils.database import Database
 
 def subscribe():
     """
-    Subscribe
+    Subscribe method using Pika
     """
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 
@@ -33,7 +33,7 @@ def callback(ch, method, properties, body):
     :param ch:
     :param method:
     :param properties:
-    :param body:
+    :param body: Message a envoyer
     """
 
     db = Database()
