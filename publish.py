@@ -15,7 +15,7 @@ def publish_message(message):
     :param message:
     """
     # Create a new instance of the Connection object
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost:15672'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
 
     # Create a new channel with the next available channel number or pass in a channel number to use
     channel = connection.channel()
