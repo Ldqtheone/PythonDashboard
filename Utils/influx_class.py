@@ -7,6 +7,7 @@
 from Utils.utils_data import *
 from Utils.Config.parser import *
 import Utils.database as db
+import BusData.publish as publisher
 
 
 class DataStorageClass:
@@ -58,7 +59,9 @@ class DataStorageClass:
                 "fields": point
             }]
 
-        self.database.write_query(data_to_send)
+        publisher.publish_message(data_to_send)
+
+        # self.database.write_query(data_to_send)
         print(self.database.execute_query(agent_id))
 
     def send_data_with_pika(self):

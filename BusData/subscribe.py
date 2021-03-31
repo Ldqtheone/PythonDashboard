@@ -1,4 +1,4 @@
-"""Name module
+"""Subscribe module
 
 Copyright (c) 2021 Brian Lecarpentier
 All Rights Reserved
@@ -7,6 +7,10 @@ Released under the MIT license
 """
 
 import pika
+import json
+import Utils.database as db
+
+database = db.Database()
 
 connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost:15672'))
 
@@ -28,5 +32,8 @@ def callback(ch, method, properties, body):
     channel.basic_consume("InfosLog", callback, auto_ack=True)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
+
+    message = (json.loads(body))
+    database.write_query(message)
 
     channel.start_consuming()
