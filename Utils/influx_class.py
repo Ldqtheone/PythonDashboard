@@ -52,6 +52,7 @@ class DataStorageClass:
             point = agent_data
 
         print(point)
+
         data_to_send = [
             {
                 "measurement": "hardware_info",

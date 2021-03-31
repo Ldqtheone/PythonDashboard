@@ -38,8 +38,8 @@ def callback(ch, method, properties, body):
 
     db = Database()
 
-    message = (json.loads(body))
-    db.write_query(message)
+    data = (json.loads(body))
+    db.write_query(data)
 
 
 if __name__ == "__main__":

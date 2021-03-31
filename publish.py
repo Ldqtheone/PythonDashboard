@@ -7,12 +7,13 @@ Released under the MIT license
 """
 
 import pika
+import json
 
 
-def publish_message(message):
+def publish_message(data):
     """
     RabbitMq publisher
-    :param message:
+    :param data:
     """
     # Create a new instance of the Connection object
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
@@ -25,8 +26,10 @@ def publish_message(message):
     # the queue.
     channel.queue_declare(queue='InfosLog', durable=True)
 
-    channel.basic_publish(exchange='InfosLog', routing_key='', body=message)
+    print(data)
 
-    print(f"[x] Sent '{message}'")
+    channel.basic_publish(exchange='', routing_key='InfosLog', body=json.dumps(data))
+
+    print(f"[x] Sent '{data}'")
 
     connection.close()

@@ -7,8 +7,8 @@ interval :
   network: 4
   sensor: 6
 
-identifier: "PC5" # PC{Unique number} | Example: PC32
+identifier: "PC7" # PC{Unique number} | Example: PC32
 token : "4DszHczuRA9-bcnynoj2ifv9sXE7rJaIXNnUcHIL2eTSeoFhsK1O7UWivZL1nZXNj47ECdYy7dkdgNh024g8Lw=="
-org : "brian.lecarpentier@edu.itescia.fr"
+org : "pythonproject"
 bucket : "hardware"
 url : "https://eu-central-1-1.aws.cloud2.influxdata.com"
