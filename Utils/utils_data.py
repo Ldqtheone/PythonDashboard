@@ -300,13 +300,41 @@ class UtilsClass:
         """
         return str(psutil.users()[0].name) + "_" + str(psutil.users()[0].pid)
 
-
-    def get_current_data(self):
+    def get_disk_usage_data(self, should_update=False):
         """
-        Get all data from psutils
+        Get all disk usage data from psUtils thanks disk partition
+        if should_update is true, we update UtilsClass attribute data with this data
+        :param should_update: need to return disk usages data or update data class attribute
+        :type should_update: bool
         """
+        partions_list = self.get_disk_partitions()
 
-        self.data = {
+        disk_usage = {}
+        for i in range(0, len(partions_list), 1):
+            if "\\" in partions_list[i].device:
+                device = "device_" + str(i)
+            else:
+                device = partions_list[i].device.split("/")[len(partions_list[i].device.split("/")) - 1]
+
+            disk_usage["disk_usage_total_" + device] = self.get_disk_usage(partions_list[i].mountpoint).total
+            disk_usage["disk_usage_used_" + device] = self.get_disk_usage(partions_list[i].mountpoint).used
+            disk_usage["disk_usage_free_" + device] = self.get_disk_usage(partions_list[i].mountpoint).free
+            disk_usage["disk_usage_percent_" + device] = self.get_disk_usage(partions_list[i].mountpoint).percent
+
+        if should_update:
+            self.data.update(disk_usage)
+            return self.data
+        else:
+            return disk_usage
+
+    def get_cpu_data(self, should_update=False):
+        """
+        Get all cpu data from psUtils
+        if should_update is true, we update UtilsClass attribute data with this data
+        :param should_update: need to return cpu data or update data class attribute
+        :type should_update: bool
+        """
+        cpu_data = {
             "user": self.get_user(),
             "system": self.get_system(),
             "idle": self.get_idle(),
@@ -320,7 +348,22 @@ class UtilsClass:
             "load_avg_1": self.get_load_avg()[0],
             "load_avg_5": self.get_load_avg()[1],
             "load_avg_15": self.get_load_avg()[2],
+        }
 
+        if should_update:
+            self.data.update(cpu_data)
+            return self.data
+        else:
+            return cpu_data
+
+    def get_memory_data(self, should_update=False):
+        """
+        Get all memory data from psUtils
+        if should_update is true, we update UtilsClass attribute data with this data
+        :param should_update: need to return memory data or update data class attribute
+        :type should_update: bool
+        """
+        memory_data = {
             "vm_total": self.get_vm_total(),
             "vm_available": self.get_vm_available(),
 
@@ -330,14 +373,44 @@ class UtilsClass:
             "sm_percent": self.get_sm_percent(),
             "sm_sin": self.get_sm_sin(),
             "sm_sout": self.get_sm_sout(),
+        }
 
+        if should_update:
+            self.data.update(memory_data)
+            return self.data
+        else:
+            return memory_data
+
+    def get_disk_data(self, should_update=False):
+        """
+        Get all disk data from psUtils
+        if should_update is true, we update UtilsClass attribute data with this data
+        :param should_update: need to return disk data or update data class attribute
+        :type should_update: bool
+        """
+        disk_data = {
             # "disk_partitions": self.get_disk_partitions(),
             #"disk_usage_list": self.get_disk_usages_list(),
             "disk_io_read_count": self.get_disk_io_read_count(),
             "disk_io_write_count": self.get_disk_io_write_count(),
             "disk_io_read_bytes": self.get_disk_io_read_bytes(),
             "disk_io_write_bytes": self.get_disk_io_write_bytes(),
+        }
 
+        if should_update:
+            self.data.update(disk_data)
+            return self.data
+        else:
+            return disk_data
+
+    def get_net_data(self, should_update=False):
+        """
+        Get all net data from psUtils
+        if should_update is true, we update UtilsClass attribute data with this data
+        :param should_update: need to return net data or update data class attribute
+        :type should_update: bool
+        """
+        net_data = {
             "net_io_bytes_sent": self.get_net_io_bytes_sent(),
             "net_io_bytes_recv": self.get_net_io_bytes_recv(),
             "net_io_packets_sent": self.get_net_io_packets_sent(),
@@ -346,27 +419,45 @@ class UtilsClass:
             "net_io_errout": self.get_net_io_errout(),
             "net_io_dropin": self.get_net_io_dropin(),
             "net_io_dropout": self.get_net_io_dropout(),
+        }
 
+        if should_update:
+            self.data.update(net_data)
+            return self.data
+        else:
+            return net_data
+
+    def get_sensor_data(self, should_update=False):
+        """
+        Get all sensor data from psUtils
+        if should_update is true, we update UtilsClass attribute data with this data
+        :param should_update: need to return sensor data or update data class attribute
+        :type should_update: bool
+        """
+        sensor_data = {
             # "sensor_temp": self.get_sensor_temp(),
             # "sensor_fans": self.get_sensor_fans(),
             # "sensor_battery_percent": self.get_sensor_battery().percent,
             # "sensor_battery_secsleft": self.get_sensor_battery().secsleft,
             # "sensor_battery_power_plugged": self.get_sensor_battery().power_plugged,
-            "user_id": self.create_user_id()
         }
 
-        partions_list = self.get_disk_partitions()
+        if should_update:
+            self.data.update(sensor_data)
+            return self.data
+        else:
+            return sensor_data
 
-        for i in range(0, len(partions_list), 1):
-            if "\\" in partions_list[i].device:
-                device = "device_" + str(i)
-            else:
-                device = partions_list[i].device.split("/")[len(partions_list[i].device.split("/")) - 1]
-
-            self.data["disk_usage_total_" + device] = self.get_disk_usage(partions_list[i].mountpoint).total
-            self.data["disk_usage_used_" + device] = self.get_disk_usage(partions_list[i].mountpoint).used
-            self.data["disk_usage_free_" + device] = self.get_disk_usage(partions_list[i].mountpoint).free
-            self.data["disk_usage_percent_" + device] = self.get_disk_usage(partions_list[i].mountpoint).percent
+    def get_current_data(self):
+        """
+        Get all data from psutils and save these in UtilsClass data attribute
+        """
+        self.get_cpu_data(True)
+        self.get_memory_data(True)
+        self.get_disk_data(True)
+        self.get_disk_usage_data(True)
+        self.get_net_data(True)
+        self.get_sensor_data(True)
 
         return self.data
 
