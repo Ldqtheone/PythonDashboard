@@ -7,6 +7,7 @@
 from Utils.utils_data import *
 from Utils.Config.parser import *
 import Utils.database as db
+import pika
 
 
 class DataStorageClass:
@@ -15,6 +16,31 @@ class DataStorageClass:
 
     def __init__(self):
             pass
+
+    def producer(self):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        channel = connection.channel()
+
+        ##loop here
+        channel.queue_declare(queue='hello')
+        channel.basic_publish(exchange='', routing_key='hello', body='Hello World!')
+        print(" [x] Sent 'Hello World!'")
+
+        connection.close()
+
+    def consumer(self):
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        channel = connection.channel()
+
+        channel.queue_declare(queue='hello')
+
+        def callback(ch, method, properties, body):
+            print(" [x] Received %r" % body)
+
+        channel.basic_consume(queue='hello', on_message_callback=callback, auto_ack=True)
+
+        print(' [*] Waiting for messages. To exit press CTRL+C')
+        channel.start_consuming()
 
     def send_data_to_influx_db(self, check_data_type=False):
         """
