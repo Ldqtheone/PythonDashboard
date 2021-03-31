@@ -63,7 +63,7 @@ class DataStorageClass:
         publisher.publish_message(data_to_send)
 
         # self.database.write_query(data_to_send)
-        print(self.database.insert_query(agent_id))
+        print(self.database.get_all_by_agent(agent_id))
 
     def send_data_with_pika(self):
         """
