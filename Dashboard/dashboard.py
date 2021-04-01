@@ -12,14 +12,16 @@ import requests
 import json
 
 
-def get_datas_by_agent_category(agent, category):
+def get_datas_by_agent_category(agent, category, start_time=2, start_unit="d"):
     """
     Retrieve datas from agent and category selected
+    :param start_unit:
+    :param start_time:
     :param agent:
     :param category:
     :return:
     """
-    OUR_API_URL = f"http://127.0.0.1:5000/get/{category}?agent={agent}"
+    OUR_API_URL = f"http://127.0.0.1:5000/get/{category}?agent={agent}?start_time={start_time}&start_unit={start_unit}"
 
     response = requests.get(OUR_API_URL)
     content = json.loads(response.content.decode('utf-8'))
@@ -103,6 +105,15 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
         'color': colors['text']
     }),
 
+    html.Div(
+        [
+            html.I("Choose start time before now in minutes / day or hours (Ex : 5 h"),
+            html.Br(),
+            dcc.Input(id="start", type="text", placeholder="Start Time in day / second / minutes or hours (Ex : 5)", debounce=True, size="50"),
+            dcc.Input(id="end", type="text", placeholder="Time unit : d = day , h = hours , m = minutes (Ex : h)", debounce=True, size="50")
+        ]
+    ),
+
     html.Label('Agents'),
     dcc.Dropdown(
         options=get_all_agents_from_api(),
@@ -136,11 +147,15 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
 @app.callback(
     dash.dependencies.Output('example-graph-2', 'figure'),
     [dash.dependencies.Input('submit-val', 'n_clicks')],
+    [dash.dependencies.Input('start', 'value')],
+    [dash.dependencies.Input('end', 'value')],
     [dash.dependencies.State('select_agent', 'value')],
     [dash.dependencies.State('select_hardware', 'value')])
-def update_output(n_clicks, value_agent, value_hardware):
+def update_output(n_clicks, start_time, start_unit, value_agent, value_hardware):
     """
     test
+    :param start_time:
+    :param start_unit:
     :param value_agent:
     :param n_clicks:
     :param value_hardware:
@@ -156,7 +171,11 @@ def update_output(n_clicks, value_agent, value_hardware):
     fig = px.line(df, x="Time", y="Value", color="Hardware", title=f"Agent : {value_agent}")
 
     if value_agent != "":
-        df = pd.DataFrame(get_datas_by_agent_category(value_agent, value_hardware))
+
+        if start_time != "" and start_unit != "":
+            df = pd.DataFrame(get_datas_by_agent_category(value_agent, value_hardware, start_time, start_unit))
+        else:
+            df = pd.DataFrame(get_datas_by_agent_category(value_agent, value_hardware))
 
         fig = px.line(df, x="Time", y="Value", color="Hardware")
 
