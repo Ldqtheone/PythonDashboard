@@ -178,7 +178,7 @@ def update_output(n_clicks, start_time, start_unit, value_agent, value_hardware)
 
     fig = px.line(df, x="Time", y="Value", color="Hardware", title=f"Agent : {value_agent}")
 
-    if value_agent != "":
+    if value_agent != "" and value_hardware != "":
 
         if start_time != "" and start_unit != "":
             df = pd.DataFrame(get_datas_by_agent_category(value_agent, value_hardware, start_time, start_unit))
