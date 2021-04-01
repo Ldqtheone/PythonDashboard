@@ -28,7 +28,7 @@ def get_data():
     Load data from config file
     :return: all the data
     """
-    stream = open("Utils/Config/data.yaml", "r")
+    stream = open("utils/config/data.yaml", "r")
     infos = load(stream, Loader=Loader)
     return infos
 

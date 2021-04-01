@@ -8,7 +8,7 @@ Released under the MIT license
 
 import pika
 import json
-from Utils.database import Database
+from utils.database import Database
 
 
 def subscribe():

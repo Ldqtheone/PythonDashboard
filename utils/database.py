@@ -1,12 +1,13 @@
-"""Database module
+"""database module
+
+-*- coding: utf-8 -*-
 
 Copyright (c) 2021 Brian Lecarpentier
 All Rights Reserved
 Released under the MIT license
-
 """
 
-from Utils.Config.parser import *
+from utils.config.parser import *
 from influxdb_client import InfluxDBClient, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 
