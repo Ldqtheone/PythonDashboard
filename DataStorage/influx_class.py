@@ -7,7 +7,7 @@
 from Utils.utils_data import *
 from Utils.Config.parser import *
 import Utils.database as db
-import publish as publisher
+from BusData import publish as publisher
 
 
 class DataStorageClass:

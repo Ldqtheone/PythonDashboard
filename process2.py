@@ -9,7 +9,7 @@ Released under the MIT license
 import os
 from multiprocessing import Pool
 
-processes = ('main.py', 'BusData/subscribe.py')
+processes = ('Api/api.py', 'Dashboard/dashboard.py')
 
 
 def run_process(process):

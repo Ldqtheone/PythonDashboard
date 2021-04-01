@@ -42,7 +42,7 @@ class Database:
         results = []
         for table in result:
             for record in table.records:
-                results.append({record.get_field(): record.get_value()})
+                results.append({record.get_field(): {f"{record.get_time()}": record.get_value()}})
 
         return results
 
@@ -62,7 +62,7 @@ class Database:
             |> filter(fn: (r) => r.agent_number == "{agent}")'
         return self.execute_query(query)
 
-    def get_data_by_category_query(self, agent, category, start_time=1, start_unit="h"):
+    def get_data_by_category_query(self, agent, category, start_time=2, start_unit="d"):
         """
         Get data from influxDb depending on category search and agent
         :param agent: current agent
