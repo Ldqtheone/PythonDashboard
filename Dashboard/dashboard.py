@@ -21,31 +21,39 @@ def get_datas_by_agent_category(agent, category, start_time=2, start_unit="d"):
     :param category:
     :return:
     """
-    OUR_API_URL = f"http://127.0.0.1:5000/get/{category}?agent={agent}?start_time={start_time}&start_unit={start_unit}"
+
+    OUR_API_URL = f"http://127.0.0.1:5000/get/{category}?agent={agent}&start_time={start_time}&start_unit={start_unit}"
 
     response = requests.get(OUR_API_URL)
     content = json.loads(response.content.decode('utf-8'))
 
-    print(content)
+    if len(content) > 0:
+        print(content)
 
-    hardwareTab = []
-    valuesTab = []
-    time_tab = []
+        hardwareTab = []
+        valuesTab = []
+        time_tab = []
 
-    for hardware in content:
-        for hardware_key, value in hardware.items():
-            hardwareTab.append(hardware_key)
-            for time_val, value_val in value.items():
-                time_tab.append(time_val)
-                valuesTab.append(value_val)
+        for hardware in content:
+            for hardware_key, value in hardware.items():
+                hardwareTab.append(hardware_key)
+                for time_val, value_val in value.items():
+                    time_tab.append(time_val)
+                    valuesTab.append(value_val)
 
-    hardwareInfo = {
-        "Time": time_tab,
-        "Value": valuesTab,
-        "Hardware": hardwareTab,
-    }
+        hardwareInfo = {
+            "Time": time_tab,
+            "Value": valuesTab,
+            "Hardware": hardwareTab,
+        }
 
-    print(hardwareInfo)
+        print(hardwareInfo)
+    else:
+        hardwareInfo = {
+            "Time": [""],
+            "Value": [0],
+            "Hardware": ["PC"]
+        }
 
     return hardwareInfo
 
