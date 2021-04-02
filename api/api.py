@@ -216,4 +216,6 @@ def get_sensor():
 # endregion
 
 
-app.run()
+if __name__ == '__main__':
+    app.run()
+

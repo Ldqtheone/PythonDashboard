@@ -1,5 +1,12 @@
-"""Parser module
+"""parser module
+
 Load and write the configuration data from config file
+
+-*- coding: utf-8 -*-
+
+Copyright (c) 2021 Brian Lecarpentier
+All Rights Reserved
+Released under the MIT license
 """
 
 from yaml import load, dump
