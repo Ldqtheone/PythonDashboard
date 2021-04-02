@@ -4,11 +4,13 @@ Load and write the configuration data from config file
 
 -*- coding: utf-8 -*-
 
-Copyright (c) 2021 Brian Lecarpentier
+Copyright (c) 2021 Guillaume Pinheiro
 All Rights Reserved
 Released under the MIT license
 """
 
+import argparse
+import sys
 from yaml import load, dump
 
 try:
@@ -30,6 +32,81 @@ class Interval(Enum):
     sensor = 5
 
 
+class ArgParser:
+    """
+    A class to parse cli args
+    """
+    parser = argparse.ArgumentParser(description='Process some integers.')
+
+    def __init__(self):
+        self.parser.add_argument('--cpu', metavar='-c', type=int, nargs='+', help='an integer for the cpu interval')
+        self.parser.add_argument('--memory', metavar='-m', type=int, nargs='+',
+                                 help='an integer for the memory interval')
+        self.parser.add_argument('--disk', metavar='-d', type=int, nargs='+', help='an integer for the disk interval')
+        self.parser.add_argument('--network', metavar='-n', type=int, nargs='+',
+                                 help='an integer for the network interval')
+        self.parser.add_argument('--sensor', metavar='-s', type=int, nargs='+',
+                                 help='an integer for the sensor interval')
+
+        self.parser.add_argument('--token', metavar='-t', type=str, nargs='+',
+                                 help='a token to connect to influxDb')
+        self.parser.add_argument('--org', metavar='-o', type=str, nargs='+',
+                                 help='an organisation name')
+        self.parser.add_argument('--bucket', metavar='-b', type=str, nargs='+',
+                                 help='a bucket name')
+        self.parser.add_argument('--url', metavar='-u', type=str, nargs='+',
+                                 help='an url for influxDb ')
+        self.parser.add_argument('--identifier', metavar='-i', type=str, nargs='+',
+                                 help='an identifier for your system, use to sort in DB')
+        self.parser.add_argument('--display', metavar='-d', type=str, nargs='+',
+                                 help='full / basic')
+
+        self.args = self.parser.parse_args()
+
+    def get_data(self, name):
+        try:
+            return vars(self.args)[name]
+        except:
+            return None
+
+
+def get_cli_args_to_string(self):
+    """
+    Get all cli args if any used
+    """
+    # Output argument-wise
+    position = 1
+    txt = ""
+    while len(sys.argv) - 1 >= position:
+        txt += sys.argv[position] + " "
+        position = position + 1
+    return txt
+
+
+# region get data from yaml or cli args
+
+def get_data_config(name):
+    """
+    Get configuration data from given args if used, else from .yaml file
+    """
+    if parser.get_data(name):
+        return parser.get_data(name)[0]
+    else:
+        # used to check if our Enum Interval contain the searched key
+        try:
+            value = Interval[name]
+            return get_data()["interval"][name]
+        except:
+            pass
+
+        # then, used to check if .yaml file contain the specified key
+        try:
+            value = get_data()[name]
+            return value
+        except:
+            pass
+
+
 def get_data():
     """
     Load data from config file
@@ -39,59 +116,6 @@ def get_data():
     infos = load(stream, Loader=Loader)
     return infos
 
+# endregion
 
-def get_interval(value):
-    """
-    Load an interval data from config file of the specified value
-    :param value : A string of type Interval (Enum)
-    :return: int of the interval value
-    """
-    return get_data()["interval"][value]
-
-
-def get_token():
-    """
-    Load token data from config file
-    :return: the token
-    """
-    return get_data()["token"]
-
-
-def get_org():
-    """
-    Load org data from config file
-    :return: the org
-    """
-    return get_data()["org"]
-
-
-def get_bucket():
-    """
-    Load bucket data from config file
-    :return: the bucket
-    """
-    return get_data()["bucket"]
-
-
-def get_url():
-    """
-    Load url data from config file
-    :return: the url
-    """
-    return get_data()["url"]
-
-
-def get_display():
-    """
-    Load display data from config file
-    :return: the display
-    """
-    return get_data()["display"]
-
-
-def get_identifier():
-    """
-    Load identifier data from config file
-    :return: the identifier
-    """
-    return get_data()["identifier"]
+parser = ArgParser()

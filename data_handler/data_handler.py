@@ -81,7 +81,7 @@ class DataHandler:
         """
         Send data to influxDB with pika (dataBus)
         """
-        data_to_send = self.prepare_data_to_send(category,  get_identifier(), check_data_type)
+        data_to_send = self.prepare_data_to_send(category,  get_data_config("identifier"), check_data_type)
         publisher.publish_message(data_to_send)
         print(data_to_send)
 
@@ -89,6 +89,6 @@ class DataHandler:
         """
         Send data directly to influxDB (without DataBus)
         """
-        data_to_send = self.prepare_data_to_send(category,  get_identifier(), check_data_type)
+        data_to_send = self.prepare_data_to_send(category,  get_data_config("identifier"), check_data_type)
         self.database.write_query(data_to_send)
         print(data_to_send)

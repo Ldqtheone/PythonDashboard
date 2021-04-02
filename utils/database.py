@@ -18,10 +18,10 @@ class Database:
     """Database class"""
 
     def __init__(self):
-        self.token = get_token()
-        self.org = get_org()
-        self.bucket = get_bucket()
-        self.client = InfluxDBClient(url=get_url(), token=self.token)
+        self.token = get_data_config("token")
+        self.org = get_data_config("org")
+        self.bucket = get_data_config("bucket")
+        self.client = InfluxDBClient(url=get_data_config("url"), token=self.token)
 
     def write_query(self, data):
         """

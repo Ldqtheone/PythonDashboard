@@ -19,15 +19,16 @@ def main():
     """ main method """
     influx = DataHandler()
 
+
     scheduler = BackgroundScheduler()
     job = scheduler.add_job(influx.send_data_with_pika, 'interval', args=[Interval.cpu.name],
-                            seconds=get_interval(Interval.cpu.name))
+                            seconds=get_data_config(Interval.cpu.name))
     job2 = scheduler.add_job(influx.send_data_with_pika, 'interval', args=[Interval.memory.name],
-                             seconds=get_interval(Interval.memory.name))
+                             seconds=get_data_config(Interval.memory.name))
     job3 = scheduler.add_job(influx.send_data_with_pika, 'interval', args=[Interval.disk.name],
-                             seconds=get_interval(Interval.disk.name))
+                             seconds=get_data_config(Interval.disk.name))
     job4 = scheduler.add_job(influx.send_data_with_pika, 'interval', args=[Interval.network.name],
-                             seconds=get_interval(Interval.network.name))
+                             seconds=get_data_config(Interval.network.name))
     scheduler.print_jobs()
     scheduler.start()
     try:
