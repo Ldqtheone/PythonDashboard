@@ -1,5 +1,7 @@
 """database module
 
+Need to use pip install influxdb-client
+
 -*- coding: utf-8 -*-
 
 Copyright (c) 2021 Brian Lecarpentier
@@ -8,7 +10,7 @@ Released under the MIT license
 """
 
 from utils.config.parser import *
-from influxdb_client import InfluxDBClient, WritePrecision
+from influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 
 
@@ -23,31 +25,34 @@ class Database:
 
     def write_query(self, data):
         """
-        Write query and insert data to Database
-        :param data: all hardware datas for current agent
+        Write query used to insert data into Database
+        :param data: all hardware data for current agent
+        :type data: list
         """
         write_api = self.client.write_api(write_options=SYNCHRONOUS)
-
         write_api.write(self.bucket, self.org, data)
 
     def execute_query(self, query):
         """
-        Querying Database to get hardware info per agent
+        Querying Database to get data.
+        Create an array of dict containing a key corresponding to psUtils data.
+        Each key is associated to another dict with a key as record time and value as the value get.
         :param query: query
-        :return: all datas
+        :type query: str
+        :return: all data as an array of dict
         """
 
-        # renvoyer un tableau de dictionnaire plutot [{cpu:1}, {cpu:2.3}, ...]
         result = self.client.query_api().query(org=self.org, query=query)
         print(result)
         results = []
+
         for table in result:
             for record in table.records:
                 results.append({record.get_field(): {f"{record.get_time()}": record.get_value()}})
 
         return results
 
-    def get_all_by_agent(self, agent, start_time=1, start_unit="h"):
+    def get_all_by_agent(self, agent, start_time=7, start_unit="d"):
         """
         Get all data in influxDb depending on agent
         :param agent: current agent
@@ -56,6 +61,7 @@ class Database:
         :type start_time: int
         :param start_unit: a time unit
         :type start_unit: str
+        :return: data from DB as an array of dict
         """
         query = f'from(bucket: "{self.bucket}")\
             |> range(start: -{start_time}{start_unit})\
@@ -74,6 +80,7 @@ class Database:
         :type start_time: int
         :param start_unit: a time unit
         :type start_unit: str
+        :return: data from DB as an array of dict
         """
         query = f'from(bucket: "{self.bucket}")\
             |> range(start: -{start_time}{start_unit})\
@@ -85,6 +92,7 @@ class Database:
     def get_agent_query(self):
         """
         Get all agent from influxDb
+        :return: an array of string containing all agents name
         """
 
         query = f"""

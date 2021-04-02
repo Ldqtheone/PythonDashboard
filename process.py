@@ -1,5 +1,7 @@
 """Process module
 
+-*- coding: utf-8 -*-
+
 Copyright (c) 2021 Brian Lecarpentier
 All Rights Reserved
 Released under the MIT license

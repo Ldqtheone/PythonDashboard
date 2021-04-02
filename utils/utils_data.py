@@ -163,8 +163,6 @@ class UtilsData:
     def get_disk_usages_list(self):
         """
         Get all disk usage statistics about the disk partition thanks to its mount point.
-        :param path: path to device
-        :type path: str
         :return: a list of disk usage tuple (total, used, free, percent)
         """
         usage_list = []
@@ -280,6 +278,7 @@ class UtilsData:
         """
         Get hardware temperatures from psUtils
         issue when used on MacOS (method doesn't exist), Availability: Linux, FreeBSD
+        :return: sensor temperature
         """
         return psutil.sensors_temperatures()
 
@@ -287,6 +286,7 @@ class UtilsData:
         """
         Get hardware fans speed from psUtils
         issue when used on MacOS (method doesn't exist), Availability: Linux
+        :return: sensor fans
         """
         return psutil.sensors_fans()
 
@@ -307,6 +307,7 @@ class UtilsData:
         if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return disk usages data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         partitions_list = self.get_disk_partitions()
 
@@ -329,6 +330,7 @@ class UtilsData:
         if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return cpu data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         cpu_data = {
             "user": self.get_user(),
@@ -353,6 +355,7 @@ class UtilsData:
         if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return memory data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         memory_data = {
             "vm_total": self.get_vm_total(),
@@ -373,6 +376,7 @@ class UtilsData:
         if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return disk data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         disk_data = {
             # "disk_partitions": self.get_disk_partitions(),
@@ -390,6 +394,7 @@ class UtilsData:
         if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return net data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         net_data = {
             "net_io_bytes_sent": self.get_net_io_bytes_sent(),
@@ -409,6 +414,7 @@ class UtilsData:
         if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return sensor data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         # All is comment in this dict because some agent could not access to these or are not numbers.
         # It then lead to issue in influxDB.
@@ -434,6 +440,7 @@ class UtilsData:
         :type new_data: dict
         :param should_update: need to return sensor data or update data class attribute
         :type should_update: bool
+        :return: a dict new data OR all data collected until now
         """
         if should_update:
             self.data.update(new_data)
@@ -444,6 +451,7 @@ class UtilsData:
     def get_current_data(self):
         """
         Get all data from psUtils and save these in UtilsData class data attribute
+        :return: a dict containing all these data
         """
         self.get_cpu_data(True)
         self.get_memory_data(True)
@@ -456,7 +464,8 @@ class UtilsData:
 
     def get_last_data(self):
         """
-        Get last data get from psUtils
+        Get all collected data from psUtils until now
+        :return: a dict containing all these data
         """
         return self.data
 

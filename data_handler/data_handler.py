@@ -1,4 +1,6 @@
-"""influx_class module
+"""data_handler module
+
+-*- coding: utf-8 -*-
 
 Copyright (c) 2021 Gwenael Marchetti--Waternaux
 All Rights Reserved
@@ -19,15 +21,16 @@ class DataHandler:
     """
 
     def __init__(self):
-        self.utils = UtilsClass()
+        self.utils = UtilsData()
         self.database = db.Database()
 
     def get_agent_data_by_category(self, category):
         """
         Return agent data corresponding to the given category,
-        are all if any correspondance
+        or all if any match
         :param category: data category to return
         :type category: str
+        :return: a dict containing appropriate data
         """
         if category == Interval.cpu.name:
             return self.utils.get_cpu_data()
@@ -52,6 +55,7 @@ class DataHandler:
         :type agent_id: str
         :param check_data_type: if True, filter none numeric value from agent data
         :type check_data_type: bool
+        :return: a dict with all prepared data to push into DB
         """
 
         agent_data = self.get_agent_data_by_category(category)

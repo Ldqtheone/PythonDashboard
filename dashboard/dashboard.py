@@ -1,7 +1,14 @@
-# -*- coding: utf-8 -*-
+"""dashBoard module
 
-# Run this app with `python app.py` and
-# visit http://127.0.0.1:8050/ in your web browser.
+-*- coding: utf-8 -*-
+
+Run this app with `python app.py` and
+visit http://127.0.0.1:8050/ in your web browser.
+
+Copyright (c) 2021 Brian Lecarpentier
+All Rights Reserved
+Released under the MIT license
+"""
 
 import dash
 import dash_core_components as dcc
@@ -14,7 +21,7 @@ import json
 
 def get_datas_by_agent_category(agent, category, start_time=2, start_unit="d"):
     """
-    Retrieve datas from agent and category selected
+    Retrieve data from agent and category selected
     :param start_unit:
     :param start_time:
     :param agent:

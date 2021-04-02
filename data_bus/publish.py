@@ -1,9 +1,13 @@
-"""Publish module
+"""publish module
+
+Need to use pip install pika.
+Also need to launch rabbitMQ.
+
+-*- coding: utf-8 -*-
 
 Copyright (c) 2021 Brian Lecarpentier
 All Rights Reserved
 Released under the MIT license
-
 """
 
 import pika
@@ -12,8 +16,20 @@ import json
 
 def publish_message(data):
     """
-    RabbitMq publisher
-    :param data: hardware datas to send in DB
+    RabbitMq publisher.
+    Used to send data into the DataBus.
+
+    Example:
+        data =
+            [
+                {
+                    "measurement": "hardware_info",
+                    "tags": {"agent_number": f"PC1", "category": cpu},
+                    "fields": {cpu_times_percent: 5.4, user:623402}
+                }
+            ]
+    :param data: hardware data to send in DB thanks to our DataBus
+    :type data: list
     """
     # Create a new instance of the Connection object
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
