@@ -61,13 +61,13 @@ def search_with_start_values(agent, category):
         # Seems to be the best way to check this
         # If not, use default start_time and start_unit values
         try:
-            print(int(request.args['start_time']))
+            print(int(request.args["start_time"]))
         except:
             print("time given is not an int")
             return db.get_data_by_category_query(agent, category)
         else:
             print("can use time given")
-            return db.get_data_by_category_query(agent, category, int(request.args['start_time']), str(request.args['start_unit']))
+            return db.get_data_by_category_query(agent, category, int(request.args["start_time"]), str(request.args["start_unit"]))
     else:
         return db.get_data_by_category_query(agent, category)
 
@@ -86,7 +86,7 @@ def search_category_if_agent_exist(category):
     if is_set_and_not_empty("agent"):
         # Use the jsonify function from Flask to convert our list of
         # Python dictionaries to the JSON format.
-        return jsonify(search_with_start_values(str(request.args['agent']), category))
+        return jsonify(search_with_start_values(str(request.args["agent"]), category))
 
     else:
         return "Error: No agent field provided. Please specify an agent."
@@ -134,7 +134,7 @@ def home():
             exemple :<br>" + create_link_from_route(get_routes["get_cpu"], "&start_time=2&start_unit=d")
 
 
-@app.route(get_routes["get_agents"]["path"], methods=['GET'])
+@app.route(get_routes["get_agents"]["path"], methods=["GET"])
 def get_agents():
     """
     This route get all agents in DB.
@@ -143,33 +143,33 @@ def get_agents():
     return jsonify(db.get_agent_query())
 
 
-@app.route(get_routes["get_data"]["path"], methods=['GET'])
+@app.route(get_routes["get_data"]["path"], methods=["GET"])
 def get_data_by_agent_category():
     """
     This route get agent data corresponding to one category in database.
     :return: a json or an error message
     """
     if is_set_and_not_empty("agent") and is_set_and_not_empty("category"):
-        return jsonify(search_with_start_values(str(request.args['agent']), str(request.args['category'])))
+        return jsonify(search_with_start_values(str(request.args["agent"]), str(request.args["category"])))
     else:
         return "Error: No agent or category field provided. Please specify an agent and category."
 
 
-@app.route(get_routes["get_all_data"]["path"], methods=['GET'])
+@app.route(get_routes["get_all_data"]["path"], methods=["GET"])
 def get_all_data_by_agent():
     """
     This route get all agent data in database.
     :return: a json or an error message
     """
     if is_set_and_not_empty("agent"):
-        return jsonify(db.get_all_by_agent(str(request.args['agent'])))
+        return jsonify(db.get_all_by_agent(str(request.args["agent"])))
     else:
         return "Error: No agent provided. Please specify an agent."
 
 
 # region get one category
 
-@app.route(get_routes[f"get_{Interval.cpu.name}"]["path"], methods=['GET'])
+@app.route(get_routes[f"get_{Interval.cpu.name}"]["path"], methods=["GET"])
 def get_cpu():
     """
     This route get all agent cpu data in database.
@@ -178,7 +178,7 @@ def get_cpu():
     return search_category_if_agent_exist(Interval.cpu.name)
 
 
-@app.route(get_routes[f"get_{Interval.memory.name}"]["path"], methods=['GET'])
+@app.route(get_routes[f"get_{Interval.memory.name}"]["path"], methods=["GET"])
 def get_memory():
     """
     This route get all agent memory data in database.
@@ -187,7 +187,7 @@ def get_memory():
     return search_category_if_agent_exist(Interval.memory.name)
 
 
-@app.route(get_routes[f"get_{Interval.disk.name}"]["path"], methods=['GET'])
+@app.route(get_routes[f"get_{Interval.disk.name}"]["path"], methods=["GET"])
 def get_disk():
     """
     This route get all agent disk data in database.
@@ -196,7 +196,7 @@ def get_disk():
     return search_category_if_agent_exist(Interval.disk.name)
 
 
-@app.route(get_routes[f"get_{Interval.network.name}"]["path"], methods=['GET'])
+@app.route(get_routes[f"get_{Interval.network.name}"]["path"], methods=["GET"])
 def get_network():
     """
     This route get all agent network data in database.
@@ -205,7 +205,7 @@ def get_network():
     return search_category_if_agent_exist(Interval.network.name)
 
 
-@app.route(get_routes[f"get_{Interval.sensor.name}"]["path"], methods=['GET'])
+@app.route(get_routes[f"get_{Interval.sensor.name}"]["path"], methods=["GET"])
 def get_sensor():
     """
     This route get all agent sensor data in database.
@@ -216,6 +216,6 @@ def get_sensor():
 # endregion
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run()
 

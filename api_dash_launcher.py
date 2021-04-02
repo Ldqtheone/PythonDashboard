@@ -10,7 +10,7 @@ Released under the MIT license
 import os
 from multiprocessing import Pool
 
-processes = ('api/api.py', 'dashboard/dashboard.py')
+processes = ("api/api.py", "dashboard/dashboard.py")
 
 
 def run_process(process):
@@ -18,9 +18,9 @@ def run_process(process):
     MultiProcess Launcher
     :param process:
     """
-    os.system('python3 {}'.format(process))
+    os.system("python3 {}".format(process))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pool = Pool(processes=2)
     pool.map(run_process, processes)

@@ -29,17 +29,17 @@ class DashBoard:
     Dashboard class
     """
     data = {}
-    external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+    external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
     app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
     def __init__(self):
-        self.colors = {'background': '#111111', 'text': '#7FDBFF'}
+        self.colors = {"background": "#111111", "text": "#7FDBFF", "lightText": "#b5b5b5", "darkText": "#000000"}
         self.df = pd.DataFrame(self.create_data_for_graph([], [], []))
         self.fig = px.line(self.df, x="Hardware", y="Value")
         self.fig.update_layout(
-            plot_bgcolor=self.colors['background'],
-            paper_bgcolor=self.colors['background'],
-            font_color=self.colors['text']
+            plot_bgcolor=self.colors["background"],
+            paper_bgcolor=self.colors["background"],
+            font_color=self.colors["text"]
         )
         self.agent_callback()
         self._create_app_layout()
@@ -50,25 +50,25 @@ class DashBoard:
         """
         Create our app layout
         """
-        self.app.layout = html.Div(style={'backgroundColor': self.colors['background']}, children=[
+        self.app.layout = html.Div(style={"backgroundColor": self.colors["background"]}, children=[
             self._create_component_title(),
 
             self._create_component_subtitle(),
 
             self._create_component_time_chooser(),
 
-            html.Label('Agents'),
+            html.Label("Agents", style={"color": self.colors["lightText"]}),
             self._create_component_agent_chooser(),
 
-            html.Label('Hardware Category'),
+            html.Label("Hardware Category", style={"color": self.colors["lightText"]}),
             self._create_component_category_chooser(),
 
-            html.Button('Submit', id='submit-val', n_clicks=0),
+            html.Button("Submit", id="submit-val", n_clicks=0, style={"color": self.colors["lightText"]}),
 
-            html.Div(id='container-button-basic'),
+            html.Div(id="container-button-basic"),
 
             dcc.Graph(
-                id='example-graph-2',
+                id="example-graph-2",
                 figure=self.fig
             )
         ])
@@ -79,10 +79,10 @@ class DashBoard:
         Children is the text displayed on navigator
         """
         return html.H1(
-            children='PythonDashboard',
+            children="PythonDashboard",
             style={
-                'textAlign': 'center',
-                'color': self.colors['text']
+                "textAlign": "center",
+                "color": self.colors["text"]
             }
         )
 
@@ -92,10 +92,10 @@ class DashBoard:
         Children is the text displayed on navigator
         """
         return html.Div(
-            children='PythonDashboard for Groupe 3.',
+            children="PythonDashboard for Groupe 3.",
             style={
-                'textAlign': 'center',
-                'color': self.colors['text']
+                "textAlign": "center",
+                "color": self.colors["text"]
             }
         )
 
@@ -106,11 +106,28 @@ class DashBoard:
         """
         return html.Div(
             [
-                html.I("Choose start time before now in minutes / day or hours (Ex : 5 h"),
+                html.I("Choose start time before now in minutes / day or hours (Ex : 5 h)"),
                 html.Br(),
-                dcc.Input(id="start", type="text", placeholder="Start Time in day / second / minutes or hours (Ex : 5)", debounce=True, size="50"),
-                dcc.Input(id="unit", type="text", placeholder="Time unit : d = day , h = hours , m = minutes (Ex : h)", debounce=True, size="50")
-            ]
+                html.Div(
+                    [
+                        dcc.Input(id="start", type="text", placeholder="Start Time in day / second / minutes or hours (Ex : 5)", debounce=True, size="50"),
+
+                        dcc.Dropdown(
+                            options=[
+                                {"label": "second", "value": "s"},
+                                {"label": "minute", "value": "m"},
+                                {"label": "hour", "value": "h"},
+                                {"label": "day", "value": "d"}
+                            ],
+                            value="h",
+                            id="unit",
+                            style={"width": "100%", "color": self.colors["darkText"]}
+                        )
+                        ],
+                    style={"display": "flex", "justify-content": "center", "width": "100%"}
+                )
+            ],
+            style={"width": "100%", "color": self.colors["lightText"]}
         )
 
     def _create_component_agent_chooser(self):
@@ -120,8 +137,8 @@ class DashBoard:
         """
         return dcc.Dropdown(
             options=self.get_all_agents_from_api(),
-            value='',
-            id='select_agent'
+            value="",
+            id="select_agent"
         )
 
     def _create_component_category_chooser(self):
@@ -131,13 +148,13 @@ class DashBoard:
         """
         return dcc.Dropdown(
             options=[
-                {'label': 'cpu', 'value': 'cpu'},
-                {'label': 'memory', 'value': 'memory'},
-                {'label': 'disk', 'value': 'disk'},
-                {'label': 'network', 'value': 'network'}
+                {"label": "cpu", "value": "cpu"},
+                {"label": "memory", "value": "memory"},
+                {"label": "disk", "value": "disk"},
+                {"label": "network", "value": "network"}
             ],
-            value='',
-            id='select_hardware'
+            value="",
+            id="select_hardware"
         )
 
     # endregion
@@ -175,7 +192,7 @@ class DashBoard:
 
         our_api_url = f"{API_URL}/get/{category}?agent={agent}&start_time={start_time}&start_unit={start_unit}"
         response = requests.get(our_api_url)
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
 
         if len(content) > 0:
             print(content)
@@ -205,13 +222,13 @@ class DashBoard:
         """
         our_api_url = f"{API_URL}/get/agents"
         response = requests.get(our_api_url)
-        content = json.loads(response.content.decode('utf-8'))
+        content = json.loads(response.content.decode("utf-8"))
 
         tab_agent = []
 
         # the label is the content displayed in our dropdown, value is the value that could be used for other request
         for agent in content:
-            tab_agent.append({'label': agent, 'value': agent})
+            tab_agent.append({"label": agent, "value": agent})
 
         return tab_agent
 
@@ -222,12 +239,12 @@ class DashBoard:
         """
 
         @self.app.callback(
-            dash.dependencies.Output('example-graph-2', 'figure'),
-            [dash.dependencies.Input('submit-val', 'n_clicks')],
-            [dash.dependencies.Input('start', 'value')],
-            [dash.dependencies.Input('unit', 'value')],
-            [dash.dependencies.State('select_agent', 'value')],
-            [dash.dependencies.State('select_hardware', 'value')])
+            dash.dependencies.Output("example-graph-2", "figure"),
+            [dash.dependencies.Input("submit-val", "n_clicks")],
+            [dash.dependencies.Input("start", "value")],
+            [dash.dependencies.Input("unit", "value")],
+            [dash.dependencies.State("select_agent", "value")],
+            [dash.dependencies.State("select_hardware", "value")])
         def update_output(n_clicks, start_time, start_unit, value_agent, value_hardware):
             """
             launch as a callback to get agent data and update the displayed graph
@@ -254,11 +271,11 @@ class DashBoard:
 
                 self.fig.update_layout(
                     title={
-                        'text': f"Agent : {value_agent} - {value_hardware}",
-                        'y': 0.9,
-                        'x': 0.5,
-                        'xanchor': 'center',
-                        'yanchor': 'top'
+                        "text": f"Agent : {value_agent} - {value_hardware}",
+                        "y": 0.9,
+                        "x": 0.5,
+                        "xanchor": "center",
+                        "yanchor": "top"
                     }
                 )
                 return self.fig
@@ -267,7 +284,7 @@ class DashBoard:
                 return px.line(data_frame, x="Time", y="Value", color="Hardware", title=f"Agent : {value_agent}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dashboard = DashBoard()
     dashboard.app.run_server(debug=True)
     #app.run_server(debug=True)
