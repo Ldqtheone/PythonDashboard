@@ -1,15 +1,16 @@
 """Process module
 
+-*- coding: utf-8 -*-
+
 Copyright (c) 2021 Brian Lecarpentier
 All Rights Reserved
 Released under the MIT license
-
 """
 
 import os
 from multiprocessing import Pool
 
-processes = ('main.py', 'BusData/subscribe.py')
+processes = ('api/api.py', 'dashboard/dashboard.py')
 
 
 def run_process(process):

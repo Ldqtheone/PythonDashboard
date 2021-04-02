@@ -1,14 +1,21 @@
-"""Module 
+"""utils_data module
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+Need to use pip install psutils.
+
+-*- coding: utf-8 -*-
+
+Copyright (c) 2021 Gwenael Marchetti--Waternaux
+All Rights Reserved
+Released under the MIT license
 """
 
 import psutil
 
 
-class UtilsClass:
-    """A class to have all data from psutils"""
+class UtilsData:
+    """
+    A class to have all data from psUtils.
+    """
     data = {}
 
     def __init__(self):
@@ -156,8 +163,6 @@ class UtilsClass:
     def get_disk_usages_list(self):
         """
         Get all disk usage statistics about the disk partition thanks to its mount point.
-        :param path: path to device
-        :type path: str
         :return: a list of disk usage tuple (total, used, free, percent)
         """
         usage_list = []
@@ -273,6 +278,7 @@ class UtilsClass:
         """
         Get hardware temperatures from psUtils
         issue when used on MacOS (method doesn't exist), Availability: Linux, FreeBSD
+        :return: sensor temperature
         """
         return psutil.sensors_temperatures()
 
@@ -280,6 +286,7 @@ class UtilsClass:
         """
         Get hardware fans speed from psUtils
         issue when used on MacOS (method doesn't exist), Availability: Linux
+        :return: sensor fans
         """
         return psutil.sensors_fans()
 
@@ -293,46 +300,37 @@ class UtilsClass:
 
     # endregion
 
-    def create_user_id(self):
-        """
-        Get number of bytes written from psUtils
-        :return: a string containing first user name and pid
-        """
-        return str(psutil.users()[0].name) + "_" + str(psutil.users()[0].pid)
-
+    # region category getters
     def get_disk_usage_data(self, should_update=False):
         """
         Get all disk usage data from psUtils thanks disk partition
-        if should_update is true, we update UtilsClass attribute data with this data
+        if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return disk usages data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
-        partions_list = self.get_disk_partitions()
+        partitions_list = self.get_disk_partitions()
 
         disk_usage = {}
-        for i in range(0, len(partions_list), 1):
-            if "\\" in partions_list[i].device:
+        for i in range(0, len(partitions_list), 1):
+            if "\\" in partitions_list[i].device:
                 device = "device_" + str(i)
             else:
-                device = partions_list[i].device.split("/")[len(partions_list[i].device.split("/")) - 1]
+                device = partitions_list[i].device.split("/")[len(partitions_list[i].device.split("/")) - 1]
 
-            disk_usage["disk_usage_total_" + device] = self.get_disk_usage(partions_list[i].mountpoint).total
-            disk_usage["disk_usage_used_" + device] = self.get_disk_usage(partions_list[i].mountpoint).used
-            disk_usage["disk_usage_free_" + device] = self.get_disk_usage(partions_list[i].mountpoint).free
-            disk_usage["disk_usage_percent_" + device] = self.get_disk_usage(partions_list[i].mountpoint).percent
-
-        if should_update:
-            self.data.update(disk_usage)
-            return self.data
-        else:
-            return disk_usage
+            disk_usage["disk_usage_total_" + device] = self.get_disk_usage(partitions_list[i].mountpoint).total
+            disk_usage["disk_usage_used_" + device] = self.get_disk_usage(partitions_list[i].mountpoint).used
+            disk_usage["disk_usage_free_" + device] = self.get_disk_usage(partitions_list[i].mountpoint).free
+            disk_usage["disk_usage_percent_" + device] = self.get_disk_usage(partitions_list[i].mountpoint).percent
+        return self.handle_get_data(disk_usage, should_update)
 
     def get_cpu_data(self, should_update=False):
         """
         Get all cpu data from psUtils
-        if should_update is true, we update UtilsClass attribute data with this data
+        if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return cpu data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         cpu_data = {
             "user": self.get_user(),
@@ -349,19 +347,15 @@ class UtilsClass:
             "load_avg_5": self.get_load_avg()[1],
             "load_avg_15": self.get_load_avg()[2],
         }
-
-        if should_update:
-            self.data.update(cpu_data)
-            return self.data
-        else:
-            return cpu_data
+        return self.handle_get_data(cpu_data, should_update)
 
     def get_memory_data(self, should_update=False):
         """
         Get all memory data from psUtils
-        if should_update is true, we update UtilsClass attribute data with this data
+        if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return memory data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         memory_data = {
             "vm_total": self.get_vm_total(),
@@ -374,19 +368,15 @@ class UtilsClass:
             "sm_sin": self.get_sm_sin(),
             "sm_sout": self.get_sm_sout(),
         }
-
-        if should_update:
-            self.data.update(memory_data)
-            return self.data
-        else:
-            return memory_data
+        return self.handle_get_data(memory_data, should_update)
 
     def get_disk_data(self, should_update=False):
         """
         Get all disk data from psUtils
-        if should_update is true, we update UtilsClass attribute data with this data
+        if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return disk data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         disk_data = {
             # "disk_partitions": self.get_disk_partitions(),
@@ -396,19 +386,15 @@ class UtilsClass:
             "disk_io_read_bytes": self.get_disk_io_read_bytes(),
             "disk_io_write_bytes": self.get_disk_io_write_bytes(),
         }
-
-        if should_update:
-            self.data.update(disk_data)
-            return self.data
-        else:
-            return disk_data
+        return self.handle_get_data(disk_data, should_update)
 
     def get_net_data(self, should_update=False):
         """
         Get all net data from psUtils
-        if should_update is true, we update UtilsClass attribute data with this data
+        if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return net data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
         net_data = {
             "net_io_bytes_sent": self.get_net_io_bytes_sent(),
@@ -420,20 +406,18 @@ class UtilsClass:
             "net_io_dropin": self.get_net_io_dropin(),
             "net_io_dropout": self.get_net_io_dropout(),
         }
-
-        if should_update:
-            self.data.update(net_data)
-            return self.data
-        else:
-            return net_data
+        return self.handle_get_data(net_data, should_update)
 
     def get_sensor_data(self, should_update=False):
         """
         Get all sensor data from psUtils
-        if should_update is true, we update UtilsClass attribute data with this data
+        if should_update is true, we update UtilsData class attribute data with this data
         :param should_update: need to return sensor data or update data class attribute
         :type should_update: bool
+        :return: a dict containing data
         """
+        # All is comment in this dict because some agent could not access to these or are not numbers.
+        # It then lead to issue in influxDB.
         sensor_data = {
             # "sensor_temp": self.get_sensor_temp(),
             # "sensor_fans": self.get_sensor_fans(),
@@ -442,15 +426,32 @@ class UtilsClass:
             # "sensor_battery_power_plugged": self.get_sensor_battery().power_plugged,
         }
 
+        return self.handle_get_data(sensor_data, should_update)
+
+    # endregion
+
+    def handle_get_data(self, new_data, should_update):
+        """
+        Handle the data to return.
+        If should_update is true, we update UtilsData class attribute data with the new data,
+        and return the current data.
+        Else, we only return the wanted data.
+        :param new_data: all data to return or update
+        :type new_data: dict
+        :param should_update: need to return sensor data or update data class attribute
+        :type should_update: bool
+        :return: a dict new data OR all data collected until now
+        """
         if should_update:
-            self.data.update(sensor_data)
+            self.data.update(new_data)
             return self.data
         else:
-            return sensor_data
+            return new_data
 
     def get_current_data(self):
         """
-        Get all data from psutils and save these in UtilsClass data attribute
+        Get all data from psUtils and save these in UtilsData class data attribute
+        :return: a dict containing all these data
         """
         self.get_cpu_data(True)
         self.get_memory_data(True)
@@ -463,6 +464,15 @@ class UtilsClass:
 
     def get_last_data(self):
         """
-        Get last data get from psutils
+        Get all collected data from psUtils until now
+        :return: a dict containing all these data
         """
         return self.data
+
+    def create_user_id(self):
+        """
+        Create and get a user id from first user name and pid.
+        This could have be used has agent_number for influxDb tag
+        :return: a string containing first user name and pid
+        """
+        return str(psutil.users()[0].name) + "_" + str(psutil.users()[0].pid)

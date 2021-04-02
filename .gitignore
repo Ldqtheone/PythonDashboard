@@ -1,6 +1,6 @@
 venv*
 .idea*
 
-Utils/__pycache__/
+utils/__pycache__/
 
-Utils/Config/__pycache__/
+utils/config/__pycache__/

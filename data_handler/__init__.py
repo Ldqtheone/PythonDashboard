@@ -1,9 +1,8 @@
-"""Name module
+"""Subscribe module
 
-Copyright (c) 2021 Brian Lecarpentier
+Copyright (c) 2021 Gwenael Marchetti--Waternaux
 All Rights Reserved
 Released under the MIT license
-
 """
 
 
