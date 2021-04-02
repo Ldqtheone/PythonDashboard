@@ -19,7 +19,6 @@ def main():
     """ main method """
     influx = DataHandler()
 
-
     scheduler = BackgroundScheduler()
     job = scheduler.add_job(influx.send_data_with_pika, "interval", args=[Interval.cpu.name],
                             seconds=get_data_config(Interval.cpu.name))
@@ -29,6 +28,8 @@ def main():
                              seconds=get_data_config(Interval.disk.name))
     job4 = scheduler.add_job(influx.send_data_with_pika, "interval", args=[Interval.network.name],
                              seconds=get_data_config(Interval.network.name))
+    job5 = scheduler.add_job(influx.send_data_with_pika, "interval", args=[Interval.sensor.name],
+                             seconds=get_data_config(Interval.sensor.name))
     scheduler.print_jobs()
     scheduler.start()
     try:
