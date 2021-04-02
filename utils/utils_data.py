@@ -418,6 +418,7 @@ class UtilsData:
         """
         # All is comment in this dict because some agent could not access to these or are not numbers.
         # It then lead to issue in influxDB.
+        # some can just be not callable, as sensor temp that lead to error
         sensor_data = {
             # "sensor_temp": self.get_sensor_temp(),
             # "sensor_fans": self.get_sensor_fans(),

@@ -46,7 +46,7 @@ class DataHandler:
             # return all the data from psUtils
             return self.utils.get_current_data()
 
-    def prepare_data_to_send(self, category, agent_id, check_data_type=False):
+    def prepare_data_to_send(self, category, agent_id, check_data_type=True):
         """
         Prepare data to send in influxDB (cloud)
         :param category: name of the data to get, used as tag in influxDB
@@ -62,9 +62,13 @@ class DataHandler:
         point = {}
 
         if check_data_type:
-            # need to be completed, to filter none numeric value
             for key, value in agent_data.items():
-                point[key] = value
+                try:
+                    val = (int(value))
+                    point[key] = value
+                except:
+                    pass
+
 
         else:
             point = agent_data
