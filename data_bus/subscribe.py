@@ -20,14 +20,14 @@ def subscribe():
     Subscribe method using Pika.
     Used to send data into Db from DataBus.
     """
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host="localhost"))
 
     channel = connection.channel()
 
-    channel.queue_declare(queue='InfosLog', durable=True)
+    channel.queue_declare(queue="InfosLog", durable=True)
 
     channel.basic_consume("InfosLog", callback, auto_ack=True)
-    print(' [*] Waiting for messages. To exit press CTRL+C')
+    print(" [*] Waiting for messages. To exit press CTRL+C")
 
     channel.start_consuming()
 

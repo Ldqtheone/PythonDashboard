@@ -36,30 +36,30 @@ class ArgParser:
     """
     A class to parse cli args
     """
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description="Process some integers.")
 
     def __init__(self):
-        self.parser.add_argument('--cpu', metavar='-c', type=int, nargs='+', help='an integer for the cpu interval')
-        self.parser.add_argument('--memory', metavar='-m', type=int, nargs='+',
-                                 help='an integer for the memory interval')
-        self.parser.add_argument('--disk', metavar='-d', type=int, nargs='+', help='an integer for the disk interval')
-        self.parser.add_argument('--network', metavar='-n', type=int, nargs='+',
-                                 help='an integer for the network interval')
-        self.parser.add_argument('--sensor', metavar='-s', type=int, nargs='+',
-                                 help='an integer for the sensor interval')
+        self.parser.add_argument("--cpu", metavar="-c", type=int, nargs="+", help="an integer for the cpu interval")
+        self.parser.add_argument("--memory", metavar="-m", type=int, nargs="+",
+                                 help="an integer for the memory interval")
+        self.parser.add_argument("--disk", metavar="-d", type=int, nargs="+", help="an integer for the disk interval")
+        self.parser.add_argument("--network", metavar="-n", type=int, nargs="+",
+                                 help="an integer for the network interval")
+        self.parser.add_argument("--sensor", metavar="-s", type=int, nargs="+",
+                                 help="an integer for the sensor interval")
 
-        self.parser.add_argument('--token', metavar='-t', type=str, nargs='+',
-                                 help='a token to connect to influxDb')
-        self.parser.add_argument('--org', metavar='-o', type=str, nargs='+',
-                                 help='an organisation name')
-        self.parser.add_argument('--bucket', metavar='-b', type=str, nargs='+',
-                                 help='a bucket name')
-        self.parser.add_argument('--url', metavar='-u', type=str, nargs='+',
-                                 help='an url for influxDb ')
-        self.parser.add_argument('--identifier', metavar='-i', type=str, nargs='+',
-                                 help='an identifier for your system, use to sort in DB')
-        self.parser.add_argument('--display', metavar='-d', type=str, nargs='+',
-                                 help='full / basic')
+        self.parser.add_argument("--token", metavar="-t", type=str, nargs="+",
+                                 help="a token to connect to influxDb")
+        self.parser.add_argument("--org", metavar="-o", type=str, nargs="+",
+                                 help="an organisation name")
+        self.parser.add_argument("--bucket", metavar="-b", type=str, nargs="+",
+                                 help="a bucket name")
+        self.parser.add_argument("--url", metavar="-u", type=str, nargs="+",
+                                 help="an url for influxDb ")
+        self.parser.add_argument("--identifier", metavar="-i", type=str, nargs="+",
+                                 help="an identifier for your system, use to sort in DB")
+        self.parser.add_argument("--display", metavar="-d", type=str, nargs="+",
+                                 help="full / basic")
 
         self.args = self.parser.parse_args()
 
